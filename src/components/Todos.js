@@ -6,24 +6,27 @@ function Todos() {
     const {isLoading, error, data: todos} = useQuery({
         queryKey: ['todos'],
         queryFn: getTodos,
-        // placeholderData: [],
-        //refetchInterval: 10 * 1000 // 10 seconds
+        // refetchInterval: 5 * 1000 // 5 seconds
     })
 
     const renderContent = () => {
         if (isLoading) {
             return (
-                <div>Loading...</div>
+                <div className="loading">Loading...</div>
             );
         }
 
         if (error) {
             return (
-                <div>An error occurred. Please try again later.</div>
+                <div className="error">An error occurred. Please try again later.</div>
             );
         }
 
-        return todos.map(todo => <div className="todo" key={todo.id}>{todo.task}</div>)
+        if (todos.length === 0) {
+            return <div className="no-todos">No tasks to complete today. 🙌</div>
+        }
+
+        return todos.map((todo, i) => <div className="todo" key={todo.id}><span>{i+1}</span>{todo.task}</div>)
     }
 
     return (
